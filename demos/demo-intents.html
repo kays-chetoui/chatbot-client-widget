@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Démo - Chatbot avec intents</title>
+		<style>
+			body {
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+				margin: 20px;
+				line-height: 1.6;
+			}
+			h1 {
+				color: #4f46e5;
+			}
+			pre {
+				background-color: #f8f9fa;
+				border: 1px solid #e9ecef;
+				border-radius: 5px;
+				padding: 15px;
+				overflow-x: auto;
+			}
+			.example-box {
+				background-color: #e8eaf6;
+				border-left: 4px solid #3f51b5;
+				padding: 15px;
+				margin: 20px 0;
+				border-radius: 0 5px 5px 0;
+			}
+			code {
+				font-family: "Courier New", Courier, monospace;
+				background-color: #f5f5f5;
+				padding: 2px 4px;
+				border-radius: 3px;
+				font-size: 0.9em;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Démo - Support des boutons d'intents dans le Chatbot</h1>
+
+		<p>Cette page démontre comment utiliser le nouveau type de message <code>intent</code> pour afficher des boutons cliquables dans le chatbot.</p>
+
+		<div class="example-box">
+			<p>Exemple de réponse API pour afficher des boutons d'intents :</p>
+			<pre><code>[
+  {
+    "type": "text",
+    "value": "Que souhaitez-vous faire ?"
+  },
+  {
+    "type": "intent",
+    "value": "Trouver un hôtel"
+  },
+  {
+    "type": "intent",
+    "value": "Trouver un séjour"
+  },
+  {
+    "type": "intent",
+    "value": "Contacter un conseiller"
+  }
+]</code></pre>
+		</div>
+
+		<h2>Comment ça fonctionne</h2>
+		<p>Quand l'API renvoie un ou plusieurs messages de type <code>intent</code>, le chatbot les affiche sous forme de boutons cliquables. Lorsque l'utilisateur clique sur un bouton :</p>
+		<ol>
+			<li>Le texte du bouton est affiché comme si l'utilisateur l'avait tapé dans le chat</li>
+			<li>Ce texte est envoyé au backend comme s'il s'agissait d'un message normal</li>
+			<li>Le backend peut alors répondre en fonction de l'intent sélectionné</li>
+		</ol>
+
+		<h2>Simulation d'API</h2>
+		<p>Pour tester cette fonctionnalité, nous pouvons simuler une réponse d'API qui inclut des intents. Ouvrez le chatbot et tapez "options" ou "menu" pour voir une démonstration.</p>
+
+		<script>
+			// Script pour simuler une réponse d'API avec des intents
+			document.addEventListener("DOMContentLoaded", () => {
+				// On écoute les messages sur la fenêtre pour intercepter les appels au webhook
+				window.addEventListener("message", (event) => {
+					// Vérifier si c'est un message du chatbot
+					if (event.data && event.data.type === "chatbot-webhook") {
+						const userMessage = event.data.payload.chatInput.toLowerCase();
+
+						// Si l'utilisateur demande les options ou le menu
+						if (userMessage.includes("options") || userMessage.includes("menu")) {
+							// Simuler une réponse avec des boutons d'intent
+							const response = [
+								{
+									type: "text",
+									value: "Voici les options disponibles. Que souhaitez-vous faire ?",
+								},
+								{
+									type: "intent",
+									value: "Trouver un hôtel",
+								},
+								{
+									type: "intent",
+									value: "Trouver un séjour",
+								},
+								{
+									type: "intent",
+									value: "Contacter un conseiller",
+								},
+							];
+
+							// Envoyer la réponse simulée au chatbot
+							window.postMessage(
+								{
+									type: "chatbot-webhook-response",
+									payload: response,
+									sessionId: event.data.sessionId,
+								},
+								"*"
+							);
+						}
+						// Si l'utilisateur a sélectionné l'intent "Trouver un hôtel"
+						else if (userMessage.includes("trouver un hôtel")) {
+							const response = [
+								{
+									type: "text",
+									value: "Super ! Pour trouver un hôtel, veuillez me préciser :",
+								},
+								{
+									type: "intent",
+									value: "Paris",
+								},
+								{
+									type: "intent",
+									value: "Lyon",
+								},
+								{
+									type: "intent",
+									value: "Marseille",
+								},
+								{
+									type: "intent",
+									value: "Autre ville",
+								},
+							];
+
+							window.postMessage(
+								{
+									type: "chatbot-webhook-response",
+									payload: response,
+									sessionId: event.data.sessionId,
+								},
+								"*"
+							);
+						}
+						// Si l'utilisateur a sélectionné l'intent "Trouver un séjour"
+						else if (userMessage.includes("trouver un séjour")) {
+							const response = [
+								{
+									type: "text",
+									value: "Pour votre séjour, quelle est la durée souhaitée ?",
+								},
+								{
+									type: "intent",
+									value: "Week-end (2-3 jours)",
+								},
+								{
+									type: "intent",
+									value: "Semaine (5-7 jours)",
+								},
+								{
+									type: "intent",
+									value: "Deux semaines",
+								},
+							];
+
+							window.postMessage(
+								{
+									type: "chatbot-webhook-response",
+									payload: response,
+									sessionId: event.data.sessionId,
+								},
+								"*"
+							);
+						}
+						// Si l'utilisateur a sélectionné l'intent "Contacter un conseiller"
+						else if (userMessage.includes("contacter un conseiller")) {
+							const response = [
+								{
+									type: "text",
+									value: "Nos conseillers sont disponibles du lundi au vendredi de 9h à 18h. Souhaitez-vous :",
+								},
+								{
+									type: "intent",
+									value: "Être rappelé",
+								},
+								{
+									type: "intent",
+									value: "Chatter avec un conseiller",
+								},
+								{
+									type: "intent",
+									value: "Revenir au menu principal",
+								},
+							];
+
+							window.postMessage(
+								{
+									type: "chatbot-webhook-response",
+									payload: response,
+									sessionId: event.data.sessionId,
+								},
+								"*"
+							);
+						}
+						// Réponse par défaut pour les autres messages
+						else {
+							const response = [
+								{
+									type: "text",
+									value: "Bonjour ! Je suis le chatbot de démonstration pour les intents. Tapez 'menu' ou 'options' pour voir les options disponibles.",
+								},
+							];
+
+							window.postMessage(
+								{
+									type: "chatbot-webhook-response",
+									payload: response,
+									sessionId: event.data.sessionId,
+								},
+								"*"
+							);
+						}
+					}
+				});
+			});
+		</script>
+
+		<!-- Intégration du chatbot -->
+		<script src="/dist-widget/chatbot-widget.js"></script>
+		<link rel="stylesheet" href="/dist-widget/chatbot-widget.css" />
+		<script>
+			window.chatbotWidget.mount({
+				position: "bottom-right",
+				title: "Assistant de voyage",
+				welcomeMessage: "Bonjour ! Je suis votre assistant de voyage virtuel. Tapez 'menu' pour voir les options disponibles.",
+			});
+		</script>
+	</body>
+</html>

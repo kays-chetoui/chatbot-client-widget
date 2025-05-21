@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Démo Chatbot - Agence de Voyage</title>
+		<!-- Tailwind CSS -->
+		<script src="../dist-widget/tailwindcss.js"></script>
+		<!-- Chatbot CSS -->
+		<link rel="stylesheet" href="../dist-widget/chatbot-widget.css" />
+		<style>
+			body {
+				font-family: "Inter", system-ui, -apple-system, sans-serif;
+				line-height: 1.5;
+				margin: 0;
+				padding: 2rem;
+				background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+				min-height: 100vh;
+			}
+			.demo-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2rem;
+				background-color: white;
+				border-radius: 1rem;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			}
+			.header {
+				text-align: center;
+				margin-bottom: 3rem;
+				color: #0369a1;
+			}
+			.features {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2rem;
+				margin-bottom: 3rem;
+			}
+			.feature-card {
+				padding: 1.5rem;
+				background-color: #f0f9ff;
+				border-radius: 0.75rem;
+				border: 1px solid #e0f2fe;
+			}
+			.feature-card h3 {
+				color: #0369a1;
+				margin-top: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="demo-container">
+			<header class="header">
+				<h1>Voyages Horizon - Assistant Virtuel</h1>
+				<p>Découvrez notre chatbot spécialisé pour l'assistance voyage</p>
+			</header>
+
+			<div class="features">
+				<div class="feature-card">
+					<h3>Recherche de Voyages</h3>
+					<p>Notre assistant vous aide à trouver la destination parfaite selon vos critères : budget, date, style de voyage, etc.</p>
+				</div>
+				<div class="feature-card">
+					<h3>Informations Pratiques</h3>
+					<p>Obtenez rapidement des informations sur les visas, les vaccins requis et les conseils de voyage.</p>
+				</div>
+				<div class="feature-card">
+					<h3>Support Client 24/7</h3>
+					<p>Assistance immédiate pour vos réservations, modifications ou questions générales sur votre voyage.</p>
+				</div>
+			</div>
+
+			<div id="chat-container"></div>
+		</div>
+
+		<script src="../dist-widget/chatbot-widget.js"></script>
+		<script>
+			// Initialisation du chatbot avec une configuration spécifique pour l'agence de voyage
+			document.addEventListener("DOMContentLoaded", function () {
+				window.ChatbotWidget.init({
+					title: "Horizon Assist",
+					welcomeMessage: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+					initialQuery: "Qu'est-ce que vous proposez ?",
+					position: "bottom-right",
+					avatarBot: "",
+					avatarUser: "",
+				});
+			});
+		</script>
+	</body>
+</html>
